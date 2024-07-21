@@ -5,7 +5,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
      <div className="container">
       <h1>Face Recognition Web App</h1>
-      <img id="videoElement" src="/api/video_feed" alt="Video Feed" />
+      <img id="videoElement" src="/api/upload_file" alt="Video Feed" />
       <style jsx>{`
         body {
           display: flex;

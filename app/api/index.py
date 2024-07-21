@@ -26,8 +26,8 @@ def upload_file():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         img_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         encodeList = findEncodings(img_path)
-        return render_template('index2.html', encodes=encodeList)
-    return render_template('index2.html')
+        return render_template('index.html', encodes=encodeList)
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
