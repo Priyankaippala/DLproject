@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compare Face Encodings</title>
+</head>
+<body>
+    <h1>Compare Face Encodings</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="img">
+        <textarea name="encodings" placeholder="Paste known encodings here"></textarea>
+        <input type="submit" value="Compare">
+    </form>
+
+    {% if value is not none %}
+        <h2>Match Result: {{ value }}</h2>
+        <h2>Output Image:</h2>
+        <img src="{{ url_for('output_file', filename=output_image) }}" alt="Output Image" width="400px" height="400px">
+    {% endif %}
+</body>
+</html>
