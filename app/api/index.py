@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, jsonify
 import os
 from werkzeug.utils import secure_filename
 import face_recognition
@@ -46,7 +46,7 @@ def upload_file():
         output_path = os.path.join(app.config['OUTPUT_FOLDER'], filename)
         cv.imwrite(output_path, img)
 
-        return render_template('index.html', encodes=encodeList, output_image=filename)
+        return jsonify({"outputImage": filename})
     return render_template('index.html')
 
 @app.route('/compare-encodings', methods=['GET', 'POST'])
@@ -65,7 +65,7 @@ def compare():
         is_match = False
         if encodeList:
             face_distances = face_recognition.face_distance(known_encodings, encodeList[0])
-            is_match = np.any(face_distances <= 0.3) 
+            is_match = np.any(face_distances <= 0.4) 
 
         
         img = cv.imread(file_path)
@@ -76,7 +76,7 @@ def compare():
         output_path = os.path.join(app.config['OUTPUT_FOLDER'], filename)
         cv.imwrite(output_path, img)
         
-        return render_template('compare.html', value=is_match, output_image=filename)
+        return jsonify({"outputImage": filename, "isMatch": is_match})
     return render_template('compare.html')
 
 @app.route('/static/uploads/<filename>')
@@ -88,4 +88,4 @@ def output_file(filename):
     return send_from_directory(app.config['OUTPUT_FOLDER'], filename)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
