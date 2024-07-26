@@ -2,24 +2,31 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [outputImage, setOutputImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [outputImage, setOutputImage] = useState<string | null>(null);
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setSelectedFile(event.target.files[0]);
+    }
   };
 
   const handleUpload = async () => {
+    if (!selectedFile) return;
     const formData = new FormData();
     formData.append("img", selectedFile);
 
-    const response = await fetch("/", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const response = await fetch("/", {
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await response.json();
-    setOutputImage(data.outputImage);
+      const data = await response.json();
+      setOutputImage(data.outputImage);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   };
 
   return (
